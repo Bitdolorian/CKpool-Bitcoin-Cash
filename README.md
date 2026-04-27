@@ -12,7 +12,7 @@ A fully integrated, deterministic solo‑mining pool for Bitcoin-Cash (BCH), com
 - Systemd services — production‑grade orchestration  
 - Artifact‑free configs — clean, reproducible, deterministic setup  
 
-This repository provides everything required to run a self‑hosted, autonomous DigiByte solo‑mining pool.
+This repository provides everything required to run a self‑hosted, autonomous Bitcoin cash solo‑mining pool.
 
 ---
 
@@ -21,13 +21,13 @@ This repository provides everything required to run a self‑hosted, autonomous 
 ### CKPool
 - Lightweight, high‑performance solo mining pool  
 - Supports ASICs  
-- Custom BSV‑specific patches  
+- Custom BCH‑specific patches  
 - Clean configuration (ckpool.conf)  
 - Built‑in stratum server  
 - Coinbase tag support via `btcsig`  
 
 ### Bitcoin-Cash Core
-- Full Bitcoin-sv node  
+- Full Bitcoin-BCH node  
 - Provides block templates to CKPool  
 - Validates mined blocks  
 - Exposes RPC for pool operations  
@@ -55,7 +55,7 @@ This repository provides everything required to run a self‑hosted, autonomous 
 
 ### Bitcoin-Cash Core
 ```
-cd bitcoin-sv  
+cd bitcoin-cash  
 ./autogen.sh  
 ./configure --without-wallet  
 make -j$(nproc)  
@@ -114,15 +114,15 @@ WantedBy=multi-user.target
 
 ```
 
-### Create CKPool‑BSV service
+### Create CKPool‑BCH service
 ```
 sudo nano /etc/systemd/system/ckpoolbch.service
 ```
 
 ```
 [Unit]
-Description=CKPool-BSV Solo Pool
-After=network.target bitcoinsv.service
+Description=CKPool-BCH Solo Pool
+After=network.target bitcoin.service
 
 [Service]
 ExecStart=/home/umbrel/bitcoin-cash/ckpool/src/ckpool -c /home/umbrel/bitcoin-cash/ckpool/ckpool.conf
@@ -292,7 +292,7 @@ http://<your-ip>:3001
 ---
 
 ## 🛡️ Security Notes
-- Never expose CKPool or Bitcoin-sv RPC to the public internet  
+- Never expose CKPool or Bitcoin-Cash RPC to the public internet  
 - Use firewall rules to restrict access  
 - Keep `.env` files private  
 - Only `.env.example` is committed  
@@ -300,8 +300,8 @@ http://<your-ip>:3001
 ---
 
 ## 📜 License
-- CKPool‑BSV: GPLv2  
-- Bitcoin-sv Core: MIT  
+- CKPool‑BCH: GPLv2  
+- Bitcoin-BCH Core: MIT  
 - CKStats: MIT  
 
 ---
