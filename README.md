@@ -92,7 +92,7 @@ pnpm start
 
 ## ⚙️ Systemd Setup (Manual Creation)
 
-### Create Bitcoin-sv service
+### Create Bitcoin-Cash service
 ```
 sudo nano /etc/systemd/system/bitcoincash.service
 ```
