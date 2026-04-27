@@ -1,4 +1,6 @@
-
+<p align="center">
+  <img src="assets/main.jpg" width="700" alt="CKPool-DigiByte Stack">
+</p>
 
 
 # CKPool‑Bitcoin-Cash: Solo Mining  
