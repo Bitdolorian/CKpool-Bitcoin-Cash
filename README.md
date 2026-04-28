@@ -2,79 +2,83 @@
 <img src="assets/main.jpg" width="700" alt="CKPool-DigiByte Stack">
 </p>
 
-CKPool‑Bitcoin-Cash: Solo Mining
+# CKPool‑Bitcoin-Cash: Solo Mining
 A fully integrated, deterministic solo‑mining pool for Bitcoin-Cash (BCH), combining:
 
-CKPool — optimized CKPool fork for Bitcoin-Cash
+-CKPool — optimized CKPool fork for Bitcoin-Cash
 
-Bitcoin-Cash Core — full node providing consensus, mempool, and block validation
+-Bitcoin-Cash Core — full node providing consensus, mempool, and block validation
 
-CKStats — modern Next.js dashboard for real‑time pool monitoring
+-CKStats — modern Next.js dashboard for real‑time pool monitoring
 
-Systemd services — production‑grade orchestration
+-Systemd services — production‑grade orchestration
 
-Artifact‑free configs — clean, reproducible, deterministic setup
+-Artifact‑free configs — clean, reproducible, deterministic setup
 
-This repository provides everything required to run a self‑hosted, autonomous Bitcoin cash solo‑mining pool.
+-This repository provides everything required to run a self‑hosted, autonomous Bitcoin cash solo‑mining pool.
 
-🚀 Features
-CKPool
-Lightweight, high‑performance solo mining pool
+---
+## 🚀 Features
 
-Supports ASICs
+### CKPool
+-Lightweight, high‑performance solo mining pool
 
-Custom BCH‑specific patches
+-Supports ASICs
 
-Clean configuration (ckpool.conf)
+-Custom BCH‑specific patches
 
-Built‑in stratum server
+-Clean configuration (ckpool.conf)
 
-Coinbase tag support via btcsig
+-Built‑in stratum server
 
-Bitcoin-Cash Core
-Full Bitcoin-BCH node
+-Coinbase tag support via btcsig
 
-Provides block templates to CKPool
+-Bitcoin-Cash Core
 
-Validates mined blocks
+-Full Bitcoin-BCH node
 
-Exposes RPC for pool operations
+-Provides block templates to CKPool
 
-Clean, unbuilt source included for reproducibility
+-Validates mined blocks
 
-CKStats Dashboard
-Next.js + Tailwind + TypeORM
+-Exposes RPC for pool operations
 
-Real‑time miner stats
+-Clean, unbuilt source included for reproducibility
+``
+## CKStats Dashboard
+-Next.js + Tailwind + TypeORM
 
-Worker performance
+-Real‑time miner stats
 
-Pool health
+-Worker performance
 
-Block submissions
+-Pool health
 
-PostgreSQL backend
+-Block submissions
 
-Clean .env.example included
+-PostgreSQL backend
 
-Systemd Integration
-ckpool.service
+-Clean .env.example included
 
-bitcoin.service
+-Systemd Integration
+-ckpool.service
 
-ckstats.service
+-bitcoin.service
 
-Automatic restart
+-ckstats.service
 
-Log rotation ready
+-Automatic restart
 
-🔧 Build Instructions
-Bitcoin-Cash Core
-This repository includes the full unbuilt Bitcoin Cash Node (BCHN) source.
-BCHN does NOT use Autotools.
-Do NOT run ./autogen.sh, ./configure, or make.
-
-Install dependencies:
+-Log rotation ready
+``
+``
+## 🔧 Build Instructions
+-Bitcoin-Cash Core
+-This repository includes the full unbuilt Bitcoin Cash Node (BCHN) source.
+-BCHN does NOT use Autotools.
+-Do NOT run ./autogen.sh, ./configure, or make.
+``
+## Install dependencies:
 
 Code
 sudo apt update
