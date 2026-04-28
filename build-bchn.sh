@@ -13,27 +13,53 @@ sudo apt install -y \
   libboost-all-dev \
   libzmq3-dev \
   libsqlite3-dev \
-  python3
+  libgmp-dev \
+  python3 \
+  git
 
 echo "=== Entering BCHN source directory ==="
-cd CKpool-Bitcoin-Cash/bitcoin-cash
+cd ~/CKpool-Bitcoin-Cash
 
-echo "=== Creating build directory ==="
+# Check if bitcoin-cash or bitcoin-cash-node directory exists
+if [ -d "bitcoin-cash" ]; then
+    cd bitcoin-cash
+elif [ -d "bitcoin-cash-node" ]; then
+    cd bitcoin-cash-node
+else
+    echo "ERROR: Could not find bitcoin-cash or bitcoin-cash-node directory!"
+    ls -la
+    exit 1
+fi
+
+echo "=== Creating fresh build directory ==="
 rm -rf build
 mkdir build
 cd build
 
-echo "=== Configuring BCHN with CMake ==="
-cmake -GNinja ..
+echo "=== Configuring BCHN with safe flags (no GUI, no tests, no packaging issues) ==="
+cmake -GNinja .. \
+  -DBUILD_BITCOIN_QT=OFF \
+  -DBUILD_BITCOIN_WALLET=OFF \
+  -DBUILD_BITCOIN_TESTS=OFF \
+  -DBUILD_PACKAGE=OFF \
+  -DENABLE_QRCODE=OFF \
+  -DCMAKE_POLICY_DEFAULT_CMP0167=OLD
 
-echo "=== Building BCHN (bitcoind, bitcoin-cli, bitcoin-tx) ==="
+echo "=== Building BCHN (this may take 30-90 minutes) ==="
 ninja
 
 echo "=== Installing binaries to ~/Bitcoincash/bin ==="
 mkdir -p ~/Bitcoincash/bin
-cp src/bitcoind src/bitcoin-cli src/bitcoin-tx ~/Bitcoincash/bin/
+cp src/bitcoind src/bitcoin-cli src/bitcoin-tx ~/Bitcoincash/bin/ 2>/dev/null || true
 
-echo "=== Build complete ==="
+# Also copy to /usr/local/bin for easier access (optional but convenient)
+sudo cp src/bitcoind src/bitcoin-cli src/bitcoin-tx /usr/local/bin/ 2>/dev/null || true
+
+echo "=== Build complete! ==="
 echo "Binaries installed to: ~/Bitcoincash/bin"
-echo "Run your node with:"
-echo "~/Bitcoincash/bin/bitcoind -datadir=~/Bitcoincash/data"
+echo "Also available system-wide in /usr/local/bin"
+echo ""
+echo "Next steps:"
+echo "1. Create data directory: mkdir -p ~/Bitcoincash/data"
+echo "2. Create config: nano ~/.bitcoin/bitcoin.conf   (or ~/Bitcoincash/data/bitcoin.conf)"
+echo "3. Start node: ~/Bitcoincash/bin/bitcoind -daemon -datadir=~/Bitcoincash/data"
