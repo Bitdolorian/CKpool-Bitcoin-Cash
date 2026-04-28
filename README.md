@@ -44,7 +44,8 @@ A fully integrated, deterministic solo‑mining pool for Bitcoin-Cash (BCH), com
 -Exposes RPC for pool operations
 
 -Clean, unbuilt source included for reproducibility
-``
+
+
 ## CKStats Dashboard
 -Next.js + Tailwind + TypeORM
 
@@ -70,8 +71,7 @@ A fully integrated, deterministic solo‑mining pool for Bitcoin-Cash (BCH), com
 -Automatic restart
 
 -Log rotation ready
-``
-``
+
 ## 🔧 Build Instructions
 ``
 -Bitcoin-Cash Core
@@ -81,7 +81,6 @@ A fully integrated, deterministic solo‑mining pool for Bitcoin-Cash (BCH), com
 ``
 ## Install dependencies:
 ``
-Code
 sudo apt update
 sudo apt install -y \
   build-essential \
@@ -98,7 +97,6 @@ sudo apt install -y \
 
 ## Build BCHN:
 ``
-Code
 cd bitcoin-cash
 mkdir build
 cd build
@@ -107,7 +105,6 @@ ninja
 ``
 ## Install binaries:
 ``
-Code
 mkdir -p ~/Bitcoincash/bin
 cp src/bitcoind src/bitcoin-cli src/bitcoin-tx ~/Bitcoincash/bin/
 CKPool
@@ -121,9 +118,9 @@ make
 
 -Install pnpm if not already available:
 ``
-Code
 curl -fsSL https://get.pnpm.io/install.sh | bash
-Code
+``
+``
 cp .env.example .env  
 pnpm install  
 pnpm build  
@@ -131,11 +128,10 @@ pnpm start
 ``
 ## ⚙️ Systemd Setup (Manual Creation)
 -Create Bitcoin-Cash service
--Code
 ``
 sudo nano /etc/systemd/system/bitcoincash.service
 ``
--Code
+
 ``
 [Unit]
 Description=Bitcoin-Cash Daemon
@@ -152,7 +148,6 @@ Type=simple
 WantedBy=multi-user.target
 ``
 ## Create CKPool‑BCH service
--Code
 ``
 sudo nano /etc/systemd/system/ckpoolbch.service
 Code
@@ -170,10 +165,9 @@ Type=simple
 WantedBy=multi-user.target
 ``
 ## Create CKStats Dashboard service
--Code
 ``
 sudo nano /etc/systemd/system/ckstatsbch.service
-Code
+``
 [Unit]
 Description=CKStats Dashboard
 After=network.target postgresql.service
@@ -190,7 +184,6 @@ Type=simple
 WantedBy=multi-user.target
 ``
 ## Enable and start all services
--Code
 ``
 sudo systemctl daemon-reload
 sudo systemctl enable bitcoin-cash ckpool ckstatsbch
@@ -200,11 +193,12 @@ sudo systemctl start bitcoin-cash ckpool ckstatsbch
 PM2 is a lightweight process manager that can supervise Bitcoin-Cash Core, CKPool‑BCH, and CKStats.
 
 1. Install PM2
-Code
+``
 sudo npm install -g pm2
 pm2 -v
-2. Start Bitcoin-sv Core under PM2
--Code
+``
+## 2. Start Bitcoin-sv Core under PM2
+
 ``
 pm2 start /home/umbrel/bitcoin-cash/src/bitcoind --name bitcoin-cash -- \
   -conf=/home/umbrel/bitcoin-cash/data/bitcoin.conf \
@@ -212,39 +206,33 @@ pm2 start /home/umbrel/bitcoin-cash/src/bitcoind --name bitcoin-cash -- \
  `` 
 ## Logs:
 
--Code
 ``
 pm2 logs bitcoin-cash
-3. Start CKPool‑BCH under PM2
-Code
+``
+## 3. Start CKPool‑BCH under PM2
 pm2 start /home/umbrel/bitcoin-cash/ckpool-bch/ --name ckpool-bch -- \
   -c /home/umbrel/bitcoin-cash/ckpool/ckpool.conf
 ``
 ## Logs:
 
--Code
 ``
 pm2 logs ckpool-bch
 ``
 ## 4. Start CKStats under PM2
--Code
+
 cd /home/umbrel/bitcoin-cash/ckstats
 ``
 pm2 start pnpm --name ckstats-bch -- start
 ``
 ## Logs:
-
--Code
 ``
 pm2 logs ckstats
 ``
 ## 5. Save PM2 Process List
--Code
 ``
 pm2 save
 ``
 ## 6. Enable PM2 Startup on Boot
--Code
 ``
 pm2 startup
 ``
@@ -253,13 +241,11 @@ pm2 startup
 ## 7. PM2 Management Commands
 Status:
 
--Code
 ``
 pm2 status
 ``
 ## Restart:
 
--Code
 ``
 pm2 restart bitcoin-cash
 pm2 restart ckpool-bch
@@ -267,7 +253,6 @@ pm2 restart ckstats-bch
 ``
 ## Stop:
 
---Code
 ``
 pm2 stop bitcoin-cash
 pm2 stop ckpool-bch
@@ -275,7 +260,6 @@ pm2 stop ckstats-bch
 ``
 ## Delete:
 
--Code
 ``
 pm2 delete bitcoin-cash
 pm2 delete ckpool-bch
