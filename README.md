@@ -45,6 +45,7 @@ A fully integrated, deterministic solo‑mining pool for Bitcoin-Cash (BCH), com
 
 -Clean, unbuilt source included for reproducibility
 
+-Either build the node manually or use the automatic build named buil-bchn.sh 
 
 ## CKStats Dashboard
 -Next.js + Tailwind + TypeORM
