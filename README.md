@@ -3,11 +3,11 @@
 </p>
 
 CKPool‑Bitcoin-Cash: Solo Mining
-A fully integrated, deterministic solo‑mining pool for Bitcoin‑Cash (BCH), combining:
+A fully integrated, deterministic solo‑mining pool for Bitcoin-Cash (BCH), combining:
 
-CKPool — optimized CKPool fork for Bitcoin‑Cash
+CKPool — optimized CKPool fork for Bitcoin-Cash
 
-Bitcoin Cash Node (BCHN) — full node providing consensus, mempool, and block validation
+Bitcoin-Cash Core — full node providing consensus, mempool, and block validation
 
 CKStats — modern Next.js dashboard for real‑time pool monitoring
 
@@ -15,7 +15,7 @@ Systemd services — production‑grade orchestration
 
 Artifact‑free configs — clean, reproducible, deterministic setup
 
-This repository provides everything required to run a self‑hosted, autonomous Bitcoin‑Cash solo‑mining pool.
+This repository provides everything required to run a self‑hosted, autonomous Bitcoin cash solo‑mining pool.
 
 🚀 Features
 CKPool
@@ -31,8 +31,8 @@ Built‑in stratum server
 
 Coinbase tag support via btcsig
 
-Bitcoin Cash Node (BCHN)
-Full BCH node
+Bitcoin-Cash Core
+Full Bitcoin-BCH node
 
 Provides block templates to CKPool
 
@@ -40,7 +40,7 @@ Validates mined blocks
 
 Exposes RPC for pool operations
 
-Unbuilt BCHN source included for deterministic builds
+Clean, unbuilt source included for reproducibility
 
 CKStats Dashboard
 Next.js + Tailwind + TypeORM
@@ -60,7 +60,7 @@ Clean .env.example included
 Systemd Integration
 ckpool.service
 
-bitcoincash.service
+bitcoin.service
 
 ckstats.service
 
@@ -69,17 +69,14 @@ Automatic restart
 Log rotation ready
 
 🔧 Build Instructions
-Bitcoin Cash Node (BCHN)
-This repository includes the full BCHN source tree unbuilt.
+Bitcoin-Cash Core
+This repository includes the full unbuilt Bitcoin Cash Node (BCHN) source.
 BCHN does NOT use Autotools.
-Do NOT run:
+Do NOT run ./autogen.sh, ./configure, or make.
+
+Install dependencies:
 
 Code
-./autogen.sh  
-./configure  
-make
-Install Dependencies (Ubuntu/Debian)
-bash
 sudo apt update
 sudo apt install -y \
   build-essential \
@@ -92,59 +89,38 @@ sudo apt install -y \
   libzmq3-dev \
   libsqlite3-dev \
   python3
-Build BCHN
-bash
+Build BCHN:
+
+Code
 cd bitcoin-cash
 mkdir build
 cd build
 cmake -GNinja ..
 ninja
-This produces:
+Install binaries:
 
 Code
-src/bitcoind
-src/bitcoin-cli
-src/bitcoin-tx
-Install Binaries
-bash
 mkdir -p ~/Bitcoincash/bin
 cp src/bitcoind src/bitcoin-cli src/bitcoin-tx ~/Bitcoincash/bin/
 CKPool
-bash
-sudo apt-get install -y build-essential yasm libzmq3-dev
-cd ckpool
+Code
+sudo apt-get install build-essential yasm libzmq3-dev
 ./configure
 make
 CKStats Dashboard
-Install pnpm:
+Install Dependencies:
 
-bash
+Install pnpm if not already available:
+
+Code
 curl -fsSL https://get.pnpm.io/install.sh | bash
-Build CKStats:
-
-bash
-cd ckstats
-cp .env.example .env
-pnpm install
-pnpm build
+Code
+cp .env.example .env  
+pnpm install  
+pnpm build  
 pnpm start
-⭐ One‑Click BCHN Build Script
-This repository includes a full automated build script:
-
-bash
-bash build-bchn.sh
-This script:
-
-installs all dependencies
-
-configures CMake
-
-builds BCHN
-
-installs binaries into ~/Bitcoincash/bin
-
 ⚙️ Systemd Setup (Manual Creation)
-Bitcoin‑Cash Node
+Create Bitcoin-Cash service
 Code
 sudo nano /etc/systemd/system/bitcoincash.service
 Code
@@ -161,13 +137,14 @@ Type=simple
 
 [Install]
 WantedBy=multi-user.target
-CKPool‑BCH
+
+Create CKPool‑BCH service
 Code
 sudo nano /etc/systemd/system/ckpoolbch.service
 Code
 [Unit]
 Description=CKPool-BCH Solo Pool
-After=network.target bitcoincash.service
+After=network.target bitcoin.service
 
 [Service]
 ExecStart=/home/umbrel/bitcoin-cash/ckpool/src/ckpool -c /home/umbrel/bitcoin-cash/ckpool/ckpool.conf
@@ -177,7 +154,8 @@ Type=simple
 
 [Install]
 WantedBy=multi-user.target
-CKStats Dashboard
+
+Create CKStats Dashboard service
 Code
 sudo nano /etc/systemd/system/ckstatsbch.service
 Code
@@ -195,48 +173,100 @@ Type=simple
 
 [Install]
 WantedBy=multi-user.target
-Enable and Start All Services
-bash
+
+Enable and start all services
+Code
 sudo systemctl daemon-reload
-sudo systemctl enable bitcoincash ckpoolbch ckstatsbch
-sudo systemctl start bitcoincash ckpoolbch ckstatsbch
+sudo systemctl enable bitcoin-cash ckpool ckstatsbch
+sudo systemctl start bitcoin-cash ckpool ckstatsbch
+
 🔥 PM2 Setup (Alternative to Systemd)
-Install PM2
-bash
+PM2 is a lightweight process manager that can supervise Bitcoin-Cash Core, CKPool‑BCH, and CKStats.
+
+1. Install PM2
+Code
 sudo npm install -g pm2
-Bitcoin‑Cash Node
-bash
+pm2 -v
+2. Start Bitcoin-sv Core under PM2
+Code
 pm2 start /home/umbrel/bitcoin-cash/src/bitcoind --name bitcoin-cash -- \
   -conf=/home/umbrel/bitcoin-cash/data/bitcoin.conf \
   -daemon=0
-CKPool‑BCH
-bash
-pm2 start /home/umbrel/bitcoin-cash/ckpool/src/ckpool --name ckpool-bch -- \
+  
+Logs:
+
+Code
+pm2 logs bitcoin-cash
+3. Start CKPool‑BCH under PM2
+Code
+pm2 start /home/umbrel/bitcoin-cash/ckpool-bch/ --name ckpool-bch -- \
   -c /home/umbrel/bitcoin-cash/ckpool/ckpool.conf
-CKStats
-bash
+
+Logs:
+
+Code
+pm2 logs ckpool-bch
+4. Start CKStats under PM2
+Code
 cd /home/umbrel/bitcoin-cash/ckstats
 pm2 start pnpm --name ckstats-bch -- start
-PM2 Persistence
-bash
+Logs:
+
+Code
+pm2 logs ckstats
+5. Save PM2 Process List
+Code
 pm2 save
+6. Enable PM2 Startup on Boot
+Code
 pm2 startup
+Follow the printed command.
+
+7. PM2 Management Commands
+Status:
+
+Code
+pm2 status
+Restart:
+
+Code
+pm2 restart bitcoin-cash
+pm2 restart ckpool-bch
+pm2 restart ckstats-bch
+Stop:
+
+Code
+pm2 stop bitcoin-cash
+pm2 stop ckpool-bch
+pm2 stop ckstats-bch
+Delete:
+
+Code
+pm2 delete bitcoin-cash
+pm2 delete ckpool-bch
+pm2 delete ckstats-bch
+
+Check CKStats:
+Open browser:
+
+Code
+http://<your-ip>:3001
 🛡️ Security Notes
-Never expose CKPool or BCHN RPC to the public internet
+Never expose CKPool or Bitcoin-Cash RPC to the public internet
 
-Use firewall rules
+Use firewall rules to restrict access
 
-Keep .env private
+Keep .env files private
 
 Only .env.example is committed
 
 📜 License
 CKPool‑BCH: GPLv2
 
-BCHN: MIT
+Bitcoin-BCH Core: MIT
 
 CKStats: MIT
 
 🤝 Contributing
-Pull requests welcome.
-Open an issue for major changes.
+Pull requests are welcome.
+For major changes, open an issue first to discuss what you’d like to modify.
