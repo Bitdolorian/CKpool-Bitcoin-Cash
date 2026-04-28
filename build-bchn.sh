@@ -16,7 +16,7 @@ sudo apt install -y \
   python3
 
 echo "=== Entering BCHN source directory ==="
-cd Bitcoincash/core
+cd CKpool-Bitcoin-Cash/bitcoin-cash
 
 echo "=== Creating build directory ==="
 rm -rf build
